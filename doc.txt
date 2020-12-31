@@ -1,0 +1,63 @@
+pg fix
+image: cygnetops/multi-server-pgfix-5-11
+
+PVC
+kubectl get storage class
+
+kubectl create secret generic pgpassword --from-literal POSTGRES_PASSWORD=123asdf
+
+zone
+https://cloud.google.com/compute/docs/regions-zones
+
+1. install google cloud sdk for travis deployment
+2. create a service account https://console.cloud.google.com/iam-admin/serviceaccounts/create?project=pristinewebdev
+travis-deployer
+3. run ruby using docker docker run -it -v $(pwd):/app ruby:2.4 sh
+4. inside the shell run gem install travis
+5. travis login --github-token
+6. encrypt file:
+   travis encrypt-file pristinewebdev-78a853a1fc87.json -r william251082/pristinewebdev
+7. put in travis: openssl aes-256-cbc -K $encrypted_248d61edfafe_key -iv $encrypted_248d61edfafe_iv -in service_account.json.enc -out service_account.json -d
+8. put the kubectl commands on google cloud command shell
+9. - gcloud config set project pristinewebdev
+   - gcloud config set compute/zone europe-west4-a
+   - gcloud container clusters get-credentials pristinewebdev-cluster
+   - kubectl create secret generic pgpassword --from-literal POSTGRES_PASSWORD=123asdf
+10. check: kubectl get pods
+11. install helm
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm install my-release ingress-nginx/ingress-nginx
+
+Configure domain:
+1. on google domain go to DNS
+2. custom resource records
+@ A 1H 35.204.14.232
+
+Cert manager
+Apply the yaml config file
+kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml
+Create the namespace for cert-manager
+helm repo add jetstack https://charts.jetstack.io
+Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm 3
+helm install \
+  cert-manager \
+  --namespace cert-manager \
+  --version v0.11.0 \
+  jetstack/cert-manager
+
+
+check certificate
+kubectl get certificates
+kubectl get secrets
+
+debug on google cloud console
+kubectl get CertificateRequest -o wide
+

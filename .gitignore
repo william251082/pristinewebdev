@@ -1,0 +1,16 @@
+.DS_Store
+
+.idea
+.vscode
+
+/.idea
+/.vscode
+
+./.idea
+./.vscode
+
+.DS_Store
+
+./client/node_modules
+./server/node_modules
+./worker/node_modules
